@@ -56,8 +56,6 @@
         }
         .section { display: none; }
         .section.active { display: block; }
-        
-        /* Dashboard Styles */
         .cycle-card {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             border-radius: 15px;
@@ -89,11 +87,7 @@
             border-radius: 10px;
         }
         .focus-icon { font-size: 24px; margin-right: 15px; }
-        
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
         label {
             display: block;
             margin-bottom: 8px;
@@ -106,11 +100,6 @@
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
         }
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -122,11 +111,7 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s;
         }
-        .btn:hover { transform: translateY(-2px); }
-        
-        /* Tracker Grid */
         .tracker-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -139,18 +124,8 @@
             border-radius: 10px;
             text-align: center;
         }
-        .tracker-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: #667eea;
-        }
-        .tracker-label {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-        
-        /* Workout Card */
+        .tracker-value { font-size: 32px; font-weight: bold; color: #667eea; }
+        .tracker-label { font-size: 12px; color: #666; margin-top: 5px; }
         .workout-card {
             background: #f0f7ff;
             border-radius: 15px;
@@ -160,35 +135,29 @@
         }
         .workout-card h4 { margin-bottom: 10px; color: #333; }
         .exercise-list { list-style: none; }
-        .exercise-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .exercise-list li:last-child { border-bottom: none; }
-        
-        /* Chart Container */
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin: 20px 0;
-        }
-        
-        /* Stacy Sims Info */
+        .exercise-list li { padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
+        .chart-container { position: relative; height: 300px; margin: 20px 0; }
         .sims-info {
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
         }
-        .sims-info h3 { margin-bottom: 10px; color: #333; }
-        .sims-info p { color: #555; line-height: 1.6; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="passwordOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%;">
+            <h2 style="margin-bottom: 20px; color: #333;">🔒 Private Access</h2>
+            <p style="margin-bottom: 20px; color: #666;">Enter password to continue</p>
+            <input type="password" id="passwordInput" placeholder="Password" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; margin-bottom: 15px;">
+            <button onclick="checkPassword()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">Enter</button>
+            <p id="passwordError" style="color: #e74c3c; margin-top: 10px; display: none;">Incorrect password</p>
+        </div>
+    </div>
+    <div class="container" id="mainContent" style="display: none;">
         <h1>🌸 Jade's Transformation</h1>
         <p class="subtitle">12-Week Female-Specific Body Recomposition</p>
-        
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
             <button class="nav-tab" onclick="showSection('profile')">Profile</button>
@@ -196,469 +165,91 @@
             <button class="nav-tab" onclick="showSection('workouts')">Workouts</button>
             <button class="nav-tab" onclick="showSection('progress')">Progress</button>
         </div>
-
-        <!-- Dashboard Section -->
         <div id="dashboard" class="section active">
             <div class="cycle-card">
                 <h3>📅 Cycle Day <span id="currentCycleDay">-</span></h3>
-                <p>Last period start: <span id="lastPeriod">Not set</span></p>
+                <p>Last period: <span id="lastPeriod">Not set</span></p>
                 <p>Cycle length: <span id="cycleLengthDisplay">-</span> days</p>
                 <span class="phase-indicator" id="currentPhase">Set up profile first</span>
             </div>
-            
             <div class="today-focus">
                 <h3>🎯 Today's Focus</h3>
-                <div class="focus-item">
-                    <span class="focus-icon">💪</span>
-                    <div>
-                        <strong>Training</strong>
-                        <p id="todayTraining">Complete your profile to see today's workout</p>
-                    </div>
-                </div>
-                <div class="focus-item">
-                    <span class="focus-icon">🥗</span>
-                    <div>
-                        <strong>Nutrition</strong>
-                        <p id="todayNutrition">Set up profile for personalized nutrition</p>
-                    </div>
-                </div>
-                <div class="focus-item">
-                    <span class="focus-icon">😴</span>
-                    <div>
-                        <strong>Recovery</strong>
-                        <p id="todayRecovery">Aim for 7-9 hours sleep tonight</p>
-                    </div>
-                </div>
+                <div class="focus-item"><span class="focus-icon">💪</span><div><strong>Training</strong><p id="todayTraining">Complete profile first</p></div></div>
+                <div class="focus-item"><span class="focus-icon">🥗</span><div><strong>Nutrition</strong><p id="todayNutrition">Set up profile for nutrition plan</p></div></div>
+                <div class="focus-item"><span class="focus-icon">😴</span><div><strong>Recovery</strong><p>Aim for 7-9 hours sleep</p></div></div>
             </div>
-            
             <div class="sims-info">
                 <h3>💡 Stacy Sims Principle</h3>
-                <p id="simsTip">Women are not small men. Your hormones affect training response, recovery, and nutrition needs throughout your cycle. This program adapts to your physiology, not against it.</p>
+                <p>Women are not small men. Your hormones affect training response, recovery, and nutrition needs throughout your cycle.</p>
             </div>
         </div>
-
-        <!-- Profile Section -->
         <div id="profile" class="section">
             <h2>Profile Setup</h2>
             <form id="profileForm">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" id="name" value="Jade" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Age</label>
-                    <input type="number" id="age" placeholder="e.g., 28" min="18" max="65">
-                </div>
-                <div class="form-group">
-                    <label>Current Weight (kg)</label>
-                    <input type="number" id="weight" placeholder="e.g., 60" step="0.1">
-                </div>
-                <div class="form-group">
-                    <label>Height (cm)</label>
-                    <input type="number" id="height" placeholder="e.g., 165">
-                </div>
-                <div class="form-group">
-                    <label>Average Cycle Length (days)</label>
-                    <input type="number" id="cycleLength" placeholder="e.g., 28 (can vary 21-35)" min="21" max="40" value="28">
-                </div>
-                <div class="form-group">
-                    <label>First Day of Last Period</label>
-                    <input type="date" id="lastPeriodDate">
-                </div>
-                <div class="form-group">
-                    <label>Training Days Per Week</label>
-                    <select id="trainingDays">
-                        <option value="3">3 days</option>
-                        <option value="4" selected>4 days</option>
-                        <option value="5">5 days</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Primary Training Location</label>
-                    <select id="trainingLocation">
-                        <option value="home" selected>Home Gym</option>
-                        <option value="gym">Commercial Gym</option>
-                        <option value="mixed">Mixed (Home + Gym)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Reformer Pilates</label>
-                    <select id="reformer">
-                        <option value="yes" selected>Yes - once per week</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
+                <div class="form-group"><label>Name</label><input type="text" id="name" value="Jade" readonly></div>
+                <div class="form-group"><label>Age</label><input type="number" id="age" placeholder="28" min="18" max="65"></div>
+                <div class="form-group"><label>Weight (kg)</label><input type="number" id="weight" placeholder="60" step="0.1"></div>
+                <div class="form-group"><label>Height (cm)</label><input type="number" id="height" placeholder="165"></div>
+                <div class="form-group"><label>Cycle Length (days)</label><input type="number" id="cycleLength" value="28" min="21" max="40"></div>
+                <div class="form-group"><label>Last Period Start</label><input type="date" id="lastPeriodDate"></div>
+                <div class="form-group"><label>Training Days</label><select id="trainingDays"><option value="3">3 days</option><option value="4" selected>4 days</option><option value="5">5 days</option></select></div>
+                <div class="form-group"><label>Location</label><select id="trainingLocation"><option value="home" selected>Home</option><option value="gym">Gym</option></select></div>
+                <div class="form-group"><label>Reformer Pilates</label><select id="reformer"><option value="yes" selected>Yes - weekly</option><option value="no">No</option></select></div>
                 <button type="submit" class="btn">Save Profile</button>
             </form>
         </div>
-              <!-- Tracker Section -->
-        <div id="tracker" class="section">
+                <div id="tracker" class="section">
             <h2>Daily Check-In</h2>
             <form id="dailyForm">
-                <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" id="checkinDate">
-                </div>
-                <div class="form-group">
-                    <label>Cycle Day</label>
-                    <input type="number" id="checkinCycleDay" placeholder="Day 1-35" min="1" max="40">
-                </div>
-                <div class="form-group">
-                    <label>Energy Level (1-10)</label>
-                    <input type="range" id="energy" min="1" max="10" value="5" oninput="document.getElementById('energyVal').textContent=this.value">
-                    <span id="energyVal">5</span>/10
-                </div>
-                <div class="form-group">
-                    <label>Mood (1-10)</label>
-                    <input type="range" id="mood" min="1" max="10" value="5" oninput="document.getElementById('moodVal').textContent=this.value">
-                    <span id="moodVal">5</span>/10
-                </div>
-                <div class="form-group">
-                    <label>Sleep Hours</label>
-                    <input type="number" id="sleep" placeholder="e.g., 7.5" step="0.5" min="0" max="12">
-                </div>
-                <div class="form-group">
-                    <label>Weight (kg) - optional</label>
-                    <input type="number" id="dailyWeight" placeholder="e.g., 60.2" step="0.1">
-                </div>
-                <div class="form-group">
-                    <label>Workout Completed?</label>
-                    <select id="workoutDone">
-                        <option value="yes">Yes</option>
-                        <option value="no" selected>No</option>
-                        <option value="rest">Rest Day</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Protein Target Hit?</label>
-                    <select id="proteinHit">
-                        <option value="yes">Yes (25-30g per meal)</option>
-                        <option value="partial">Partial</option>
-                        <option value="no" selected>No</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Water Intake (glasses)</label>
-                    <input type="number" id="water" placeholder="e.g., 8" min="0" max="20">
-                </div>
-                <div class="form-group">
-                    <label>Notes (symptoms, cravings, etc.)</label>
-                    <textarea id="notes" rows="3" placeholder="e.g., Craving carbs, slight cramps..."></textarea>
-                </div>
-                <button type="submit" class="btn">Save Daily Entry</button>
+                <div class="form-group"><label>Date</label><input type="date" id="checkinDate"></div>
+                <div class="form-group"><label>Cycle Day</label><input type="number" id="checkinCycleDay" placeholder="1-35" min="1" max="40"></div>
+                <div class="form-group"><label>Energy (1-10)</label><input type="range" id="energy" min="1" max="10" value="5" oninput="document.getElementById('energyVal').textContent=this.value"><span id="energyVal">5</span>/10</div>
+                <div class="form-group"><label>Mood (1-10)</label><input type="range" id="mood" min="1" max="10" value="5" oninput="document.getElementById('moodVal').textContent=this.value"><span id="moodVal">5</span>/10</div>
+                <div class="form-group"><label>Sleep (hours)</label><input type="number" id="sleep" placeholder="7.5" step="0.5" min="0" max="12"></div>
+                <div class="form-group"><label>Weight (kg, optional)</label><input type="number" id="dailyWeight" step="0.1"></div>
+                <div class="form-group"><label>Workout?</label><select id="workoutDone"><option value="yes">Yes</option><option value="no" selected>No</option><option value="rest">Rest Day</option></select></div>
+                <div class="form-group"><label>Protein target?</label><select id="proteinHit"><option value="yes">Yes</option><option value="partial">Partial</option><option value="no" selected>No</option></select></div>
+                <div class="form-group"><label>Water (glasses)</label><input type="number" id="water" placeholder="8" min="0" max="20"></div>
+                <div class="form-group"><label>Notes</label><textarea id="notes" rows="3" placeholder="Symptoms, cravings..."></textarea></div>
+                <button type="submit" class="btn">Save Entry</button>
             </form>
-            
-            <h3 style="margin-top: 30px;">Recent Entries</h3>
-            <div id="recentEntries"></div>
+            <h3 style="margin-top: 30px;">Recent</h3><div id="recentEntries"></div>
         </div>
-
-        <!-- Workouts Section -->
         <div id="workouts" class="section">
-            <h2>Weekly Workout Plan</h2>
-            <p style="margin-bottom: 20px; color: #666;">4-day split adapted to your cycle phase</p>
-            
-            <div class="workout-card">
-                <h4>Day 1: Lower Body Strength + Reformer</h4>
-                <span style="color: #667eea; font-size: 12px;">Follicular: Heavy | Luteal: Moderate</span>
-                <ul class="exercise-list">
-                    <li>🦵 Goblet Squats - 3x10-12</li>
-                    <li>🍑 Romanian Deadlifts - 3x10-12</li>
-                    <li>🔥 Hip Thrusts - 3x12-15</li>
-                    <li>🦵 Walking Lunges - 3x10/leg</li>
-                    <li>🧘 Reformer Pilates - 45 min</li>
-                </ul>
-            </div>
-            
-            <div class="workout-card">
-                <h4>Day 2: Upper Body Push + Core</h4>
-                <span style="color: #667eea; font-size: 12px;">Follicular: Heavy | Luteal: Moderate</span>
-                <ul class="exercise-list">
-                    <li>💪 Push-ups (or DB Press) - 3x8-12</li>
-                    <li>🎯 Overhead Press - 3x10-12</li>
-                    <li>✨ Lateral Raises - 3x12-15</li>
-                    <li>🔥 Tricep Dips - 3x10-12</li>
-                    <li>🎯 Plank - 3x30-60 sec</li>
-                    <li>🧘 Dead Bug - 3x10/side</li>
-                </ul>
-            </div>
-            
-            <div class="workout-card">
-                <h4>Day 3: Lower Body Power + HIIT</h4>
-                <span style="color: #667eea; font-size: 12px;">Follicular: HIIT OK | Luteal: Reduce intensity</span>
-                <ul class="exercise-list">
-                    <li>⚡ Jump Squats - 3x8</li>
-                    <li>🍑 Bulgarian Split Squats - 3x8/leg</li>
-                    <li>🔥 Kettlebell Swings - 3x15</li>
-                    <li>💨 HIIT: 20 sec on/10 off x 8 rounds</li>
-                    <li>🧘 Hip Flexor Stretch - 2 min/side</li>
-                </ul>
-            </div>
-            
-            <div class="workout-card">
-                <h4>Day 4: Upper Body Pull + Core</h4>
-                <span style="color: #667eea; font-size: 12px;">Follicular: Heavy | Luteal: Moderate</span>
-                <ul class="exercise-list">
-                    <li>💪 Rows (DB or Band) - 3x10-12</li>
-                    <li>🎯 Lat Pulldowns or Pull-ups - 3x6-10</li>
-                    <li>✨ Face Pulls - 3x15</li>
-                    <li>🔥 Bicep Curls - 3x12-15</li>
-                    <li>🎯 Russian Twists - 3x20</li>
-                    <li>🧘 Bird Dog - 3x10/side</li>
-                </ul>
-            </div>
-            
-            <div class="sims-info">
-                <h3>🔄 Cycle Adaptations</h3>
-                <p><strong>Follicular (Days 1-14):</strong> Lift heavy, progressive overload, HIIT is fine. Higher carb tolerance.</p>
-                <p style="margin-top: 10px;"><strong>Luteal (Days 15-28):</strong> Moderate weights, focus on form, reduce HIIT intensity. Increase carbs and magnesium.</p>
-            </div>
+            <h2>Workouts</h2>
+            <div class="workout-card"><h4>Day 1: Lower Body + Reformer</h4><ul class="exercise-list"><li>Goblet Squats 3x10-12</li><li>Romanian Deadlifts 3x10-12</li><li>Hip Thrusts 3x12-15</li><li>Walking Lunges 3x10/leg</li><li>Reformer Pilates 45min</li></ul></div>
+            <div class="workout-card"><h4>Day 2: Push + Core</h4><ul class="exercise-list"><li>Push-ups 3x8-12</li><li>Overhead Press 3x10-12</li><li>Lateral Raises 3x12-15</li><li>Tricep Dips 3x10-12</li><li>Plank 3x30-60s</li></ul></div>
+            <div class="workout-card"><h4>Day 3: Lower Power + HIIT</h4><ul class="exercise-list"><li>Jump Squats 3x8</li><li>Bulgarian Split Squats 3x8/leg</li><li>Kettlebell Swings 3x15</li><li>HIIT 20s on/10s off x8</li></ul></div>
+            <div class="workout-card"><h4>Day 4: Pull + Core</h4><ul class="exercise-list"><li>Rows 3x10-12</li><li>Lat Pulldowns 3x6-10</li><li>Face Pulls 3x15</li><li>Bicep Curls 3x12-15</li><li>Russian Twists 3x20</li></ul></div>
         </div>
-
-        <!-- Progress Section -->
         <div id="progress" class="section">
-            <h2>Progress Tracking</h2>
-            
+            <h2>Progress</h2>
             <div class="tracker-grid">
-                <div class="tracker-item">
-                    <div class="tracker-value" id="totalWorkouts">0</div>
-                    <div class="tracker-label">Workouts Done</div>
-                </div>
-                <div class="tracker-item">
-                    <div class="tracker-value" id="avgEnergy">-</div>
-                    <div class="tracker-label">Avg Energy</div>
-                </div>
-                <div class="tracker-item">
-                    <div class="tracker-value" id="avgSleep">-</div>
-                    <div class="tracker-label">Avg Sleep (hrs)</div>
-                </div>
-                <div class="tracker-item">
-                    <div class="tracker-value" id="proteinStreak">0</div>
-                    <div class="tracker-label">Protein Streak</div>
-                </div>
+                <div class="tracker-item"><div class="tracker-value" id="totalWorkouts">0</div><div class="tracker-label">Workouts</div></div>
+                <div class="tracker-item"><div class="tracker-value" id="avgEnergy">-</div><div class="tracker-label">Avg Energy</div></div>
+                <div class="tracker-item"><div class="tracker-value" id="avgSleep">-</div><div class="tracker-label">Avg Sleep</div></div>
+                <div class="tracker-item"><div class="tracker-value" id="proteinStreak">0</div><div class="tracker-label">Protein Streak</div></div>
             </div>
-            
-            <h3>Energy & Mood Trends</h3>
-            <div class="chart-container">
-                <canvas id="trendChart"></canvas>
-            </div>
-            
-            <h3>Weight Trend</h3>
-            <div class="chart-container">
-                <canvas id="weightChart"></canvas>
-            </div>
+            <h3>Trends</h3><div class="chart-container"><canvas id="trendChart"></canvas></div>
+            <h3>Weight</h3><div class="chart-container"><canvas id="weightChart"></canvas></div>
         </div>
     </div>
-      <script>
-        // Data Storage
-        let profile = JSON.parse(localStorage.getItem('jadeProfile')) || {};
-        let entries = JSON.parse(localStorage.getItem('jadeEntries')) || [];
-        let trendChart, weightChart;
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('checkinDate').valueAsDate = new Date();
-            loadProfile();
-            updateDashboard();
-            displayRecentEntries();
-            updateProgress();
-        });
-
-        // Navigation
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            event.target.classList.add('active');
-            
-            if (sectionId === 'progress') {
-                setTimeout(initCharts, 100);
-            }
-        }
-
-        // Profile Form
-        document.getElementById('profileForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            profile = {
-                name: document.getElementById('name').value,
-                age: document.getElementById('age').value,
-                weight: document.getElementById('weight').value,
-                height: document.getElementById('height').value,
-                cycleLength: document.getElementById('cycleLength').value,
-                lastPeriodDate: document.getElementById('lastPeriodDate').value,
-                trainingDays: document.getElementById('trainingDays').value,
-                trainingLocation: document.getElementById('trainingLocation').value,
-                reformer: document.getElementById('reformer').value
-            };
-            localStorage.setItem('jadeProfile', JSON.stringify(profile));
-            alert('Profile saved!');
-            updateDashboard();
-        });
-
-        function loadProfile() {
-            if (profile.age) document.getElementById('age').value = profile.age;
-            if (profile.weight) document.getElementById('weight').value = profile.weight;
-            if (profile.height) document.getElementById('height').value = profile.height;
-            if (profile.cycleLength) document.getElementById('cycleLength').value = profile.cycleLength;
-            if (profile.lastPeriodDate) document.getElementById('lastPeriodDate').value = profile.lastPeriodDate;
-            if (profile.trainingDays) document.getElementById('trainingDays').value = profile.trainingDays;
-            if (profile.trainingLocation) document.getElementById('trainingLocation').value = profile.trainingLocation;
-            if (profile.reformer) document.getElementById('reformer').value = profile.reformer;
-        }
-
-        // Daily Form
-        document.getElementById('dailyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const entry = {
-                date: document.getElementById('checkinDate').value,
-                cycleDay: document.getElementById('checkinCycleDay').value,
-                energy: document.getElementById('energy').value,
-                mood: document.getElementById('mood').value,
-                sleep: document.getElementById('sleep').value,
-                weight: document.getElementById('dailyWeight').value,
-                workoutDone: document.getElementById('workoutDone').value,
-                proteinHit: document.getElementById('proteinHit').value,
-                water: document.getElementById('water').value,
-                notes: document.getElementById('notes').value
-            };
-            entries.push(entry);
-            localStorage.setItem('jadeEntries', JSON.stringify(entries));
-            alert('Entry saved!');
-            displayRecentEntries();
-            updateProgress();
-            document.getElementById('dailyForm').reset();
-            document.getElementById('checkinDate').valueAsDate = new Date();
-        });
-
-        function displayRecentEntries() {
-            const container = document.getElementById('recentEntries');
-            if (entries.length === 0) {
-                container.innerHTML = '<p style="color: #666;">No entries yet. Start tracking today!</p>';
-                return;
-            }
-            const recent = entries.slice(-5).reverse();
-            container.innerHTML = recent.map(e => `
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-                    <strong>${e.date}</strong> - Day ${e.cycleDay} | Energy: ${e.energy}/10 | ${e.workoutDone === 'yes' ? '✅ Workout' : e.workoutDone === 'rest' ? '😴 Rest' : '❌ No workout'}
-                    ${e.notes ? `<br><small style="color: #666;">${e.notes}</small>` : ''}
-                </div>
-            `).join('');
-        }
-
-        // Dashboard Updates
-        function updateDashboard() {
-            if (!profile.lastPeriodDate) return;
-            
-            const lastPeriod = new Date(profile.lastPeriodDate);
-            const today = new Date();
-            const diffDays = Math.floor((today - lastPeriod) / (1000 * 60 * 60 * 24));
-            const cycleLength = parseInt(profile.cycleLength) || 28;
-            const cycleDay = (diffDays % cycleLength) + 1;
-            
-            document.getElementById('currentCycleDay').textContent = cycleDay;
-            document.getElementById('lastPeriod').textContent = profile.lastPeriodDate;
-            document.getElementById('cycleLengthDisplay').textContent = cycleLength;
-            
-            // Determine phase
-            let phase, trainingFocus, nutritionFocus;
-            if (cycleDay <= 14) {
-                phase = '🌱 Follicular Phase';
-                trainingFocus = 'Lift HEAVY. Progressive overload. HIIT is fine.';
-                nutritionFocus = 'Higher carbs OK. Protein at every meal (25-30g).';
-            } else {
-                phase = '🌙 Luteal Phase';
-                trainingFocus = 'Moderate weights. Focus on form. Reduce HIIT intensity.';
-                nutritionFocus = 'Increase carbs + magnesium. Manage cravings with protein.';
-            }
-            
-            document.getElementById('currentPhase').textContent = phase;
-            document.getElementById('todayTraining').textContent = trainingFocus;
-            document.getElementById('todayNutrition').textContent = nutritionFocus;
-        }
-
-        // Progress Stats
-        function updateProgress() {
-            const workouts = entries.filter(e => e.workoutDone === 'yes').length;
-            const avgEnergy = entries.length > 0 ? (entries.reduce((a, b) => a + parseInt(b.energy), 0) / entries.length).toFixed(1) : '-';
-            const avgSleep = entries.length > 0 ? (entries.reduce((a, b) => a + (parseFloat(b.sleep) || 0), 0) / entries.filter(e => e.sleep).length).toFixed(1) : '-';
-            const proteinStreak = calculateProteinStreak();
-            
-            document.getElementById('totalWorkouts').textContent = workouts;
-            document.getElementById('avgEnergy').textContent = avgEnergy;
-            document.getElementById('avgSleep').textContent = avgSleep;
-            document.getElementById('proteinStreak').textContent = proteinStreak;
-        }
-
-        function calculateProteinStreak() {
-            let streak = 0;
-            for (let i = entries.length - 1; i >= 0; i--) {
-                if (entries[i].proteinHit === 'yes') streak++;
-                else break;
-            }
-            return streak;
-        }
-
-        // Charts
-        function initCharts() {
-            if (entries.length < 2) return;
-            
-            const labels = entries.map(e => e.date);
-            const energyData = entries.map(e => e.energy);
-            const moodData = entries.map(e => e.mood);
-            const weightData = entries.filter(e => e.weight).map(e => ({x: e.date, y: e.weight}));
-            
-            // Energy & Mood Chart
-            const trendCtx = document.getElementById('trendChart').getContext('2d');
-            if (trendChart) trendChart.destroy();
-            trendChart = new Chart(trendCtx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Energy',
-                        data: energyData,
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.4
-                    }, {
-                        label: 'Mood',
-                        data: moodData,
-                        borderColor: '#f093fb',
-                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { min: 1, max: 10 }
-                    }
-                }
-            });
-            
-            // Weight Chart
-            if (weightData.length > 1) {
-                const weightCtx = document.getElementById('weightChart').getContext('2d');
-                if (weightChart) weightChart.destroy();
-                weightChart = new Chart(weightCtx, {
-                    type: 'line',
-                    data: {
-                        labels: weightData.map(d => d.x),
-                        datasets: [{
-                            label: 'Weight (kg)',
-                            data: weightData.map(d => d.y),
-                            borderColor: '#4facfe',
-                            backgroundColor: 'rgba(79, 172, 254, 0.1)',
-                            tension: 0.4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false
-                    }
-                });
-            }
-        }
+    <script>
+        function checkPassword(){const p=document.getElementById('passwordInput').value;if(p==='Kimiisawesome!!!'){document.getElementById('passwordOverlay').style.display='none';document.getElementById('mainContent').style.display='block';localStorage.setItem('jadeAuth','true');}else{document.getElementById('passwordError').style.display='block';}}
+        if(localStorage.getItem('jadeAuth')==='true'){document.getElementById('passwordOverlay').style.display='none';document.getElementById('mainContent').style.display='block';}
+        document.getElementById('passwordInput')?.addEventListener('keypress',e=>{if(e.key==='Enter')checkPassword();});
+        let profile=JSON.parse(localStorage.getItem('jadeProfile'))||{};
+        let entries=JSON.parse(localStorage.getItem('jadeEntries'))||[];
+        let trendChart,weightChart;
+        document.addEventListener('DOMContentLoaded',()=>{document.getElementById('checkinDate').valueAsDate=new Date();loadProfile();updateDashboard();displayRecent();updateProgress();});
+        function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');event.target.classList.add('active');if(id==='progress')setTimeout(initCharts,100);}
+        document.getElementById('profileForm').addEventListener('submit',e=>{e.preventDefault();profile={name:document.getElementById('name').value,age:document.getElementById('age').value,weight:document.getElementById('weight').value,height:document.getElementById('height').value,cycleLength:document.getElementById('cycleLength').value,lastPeriodDate:document.getElementById('lastPeriodDate').value,trainingDays:document.getElementById('trainingDays').value,trainingLocation:document.getElementById('trainingLocation').value,reformer:document.getElementById('reformer').value};localStorage.setItem('jadeProfile',JSON.stringify(profile));alert('Saved!');updateDashboard();});
+        function loadProfile(){if(profile.age)document.getElementById('age').value=profile.age;if(profile.weight)document.getElementById('weight').value=profile.weight;if(profile.height)document.getElementById('height').value=profile.height;if(profile.cycleLength)document.getElementById('cycleLength').value=profile.cycleLength;if(profile.lastPeriodDate)document.getElementById('lastPeriodDate').value=profile.lastPeriodDate;}
+        document.getElementById('dailyForm').addEventListener('submit',e=>{e.preventDefault();entries.push({date:document.getElementById('checkinDate').value,cycleDay:document.getElementById('checkinCycleDay').value,energy:document.getElementById('energy').value,mood:document.getElementById('mood').value,sleep:document.getElementById('sleep').value,weight:document.getElementById('dailyWeight').value,workoutDone:document.getElementById('workoutDone').value,proteinHit:document.getElementById('proteinHit').value,water:document.getElementById('water').value,notes:document.getElementById('notes').value});localStorage.setItem('jadeEntries',JSON.stringify(entries));alert('Saved!');displayRecent();updateProgress();document.getElementById('dailyForm').reset();document.getElementById('checkinDate').valueAsDate=new Date();});
+        function displayRecent(){const c=document.getElementById('recentEntries');if(entries.length===0){c.innerHTML='<p style="color:#666">No entries yet</p>';return;}c.innerHTML=entries.slice(-5).reverse().map(e=>`<div style="background:#f8f9fa;padding:15px;border-radius:10px;margin-bottom:10px"><strong>${e.date}</strong> Day ${e.cycleDay}|E:${e.energy}/10|${e.workoutDone==='yes'?'✅':'❌'}${e.notes?`<br><small style="color:#666">${e.notes}</small>`:''}</div>`).join('');}
+        function updateDashboard(){if(!profile.lastPeriodDate)return;const last=new Date(profile.lastPeriodDate);const today=new Date();const day=Math.floor((today-last)/(86400000))%(parseInt(profile.cycleLength)||28)+1;document.getElementById('currentCycleDay').textContent=day;document.getElementById('lastPeriod').textContent=profile.lastPeriodDate;document.getElementById('cycleLengthDisplay').textContent=profile.cycleLength||28;const phase=day<=14?'🌱 Follicular':'🌙 Luteal';const train=day<=14?'Lift HEAVY. Progressive overload.':'Moderate weights. Focus on form.';const nut=day<=14?'Higher carbs OK. 25-30g protein per meal.':'Increase carbs + magnesium.';document.getElementById('currentPhase').textContent=phase;document.getElementById('todayTraining').textContent=train;document.getElementById('todayNutrition').textContent=nut;}
+        function updateProgress(){document.getElementById('totalWorkouts').textContent=entries.filter(e=>e.workoutDone==='yes').length;document.getElementById('avgEnergy').textContent=entries.length?(entries.reduce((a,b)=>a+parseInt(b.energy),0)/entries.length).toFixed(1):'-';document.getElementById('avgSleep').textContent=entries.filter(e=>e.sleep).length?(entries.reduce((a,b)=>a+(parseFloat(b.sleep)||0),0)/entries.filter(e=>e.sleep).length).toFixed(1):'-';let streak=0;for(let i=entries.length-1;i>=0;i--){if(entries[i].proteinHit==='yes')streak++;else break;}document.getElementById('proteinStreak').textContent=streak;}
+        function initCharts(){if(entries.length<2)return;const labels=entries.map(e=>e.date);const ed=entries.map(e=>e.energy);const md=entries.map(e=>e.mood);const wd=entries.filter(e=>e.weight).map(e=>({x:e.date,y:e.weight}));const tc=document.getElementById('trendChart').getContext('2d');if(trendChart)trendChart.destroy();trendChart=new Chart(tc,{type:'line',data:{labels:labels,datasets:[{label:'Energy',data:ed,borderColor:'#667eea',backgroundColor:'rgba(102,126,234,0.1)',tension:0.4},{label:'Mood',data:md,borderColor:'#f093fb',backgroundColor:'rgba(240,147,251,0.1)',tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:1,max:10}}}});if(wd.length>1){const wc=document.getElementById('weightChart').getContext('2d');if(weightChart)weightChart.destroy();weightChart=new Chart(wc,{type:'line',data:{labels:wd.map(d=>d.x),datasets:[{label:'Weight(kg)',data:wd.map(d=>d.y),borderColor:'#4facfe',backgroundColor:'rgba(79,172,254,0.1)',tension:0.4}]},options:{responsive:true,maintainAspectRatio:false}});}
     </script>
 </body>
 </html>
