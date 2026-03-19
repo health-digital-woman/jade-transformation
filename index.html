@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jade's Body Transformation</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>Jade's Transformation</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -22,39 +21,6 @@
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        
-        /* Login Screen */
-        .login-screen {
-            text-align: center;
-            padding: 40px 20px;
-        }
-        .login-screen h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-        .login-screen p {
-            color: #666;
-            margin-bottom: 30px;
-        }
-        .g_id_signin {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .access-denied {
-            color: #e74c3c;
-            margin-top: 20px;
-            padding: 15px;
-            background: #ffebee;
-            border-radius: 10px;
-            display: none;
-        }
-        
-        /* Main App (hidden until login) */
-        #mainApp { display: none; }
-        
-        /* Greeting */
         .greeting {
             text-align: center;
             margin-bottom: 20px;
@@ -73,8 +39,6 @@
             font-weight: bold;
             font-size: 14px;
         }
-        
-        /* Cycle Wheel */
         .cycle-wheel {
             width: 200px;
             height: 200px;
@@ -95,8 +59,6 @@
         }
         .wheel-day { font-size: 36px; font-weight: bold; color: #667eea; }
         .wheel-label { font-size: 11px; color: #666; }
-        
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -111,8 +73,6 @@
         }
         .stat-number { font-size: 28px; font-weight: bold; color: #ff6b35; }
         .stat-label { font-size: 11px; color: #666; }
-        
-        /* Progress */
         .progress-card {
             background: #e8f5e9;
             border-radius: 15px;
@@ -137,8 +97,6 @@
             border-radius: 10px;
             transition: width 0.5s ease;
         }
-        
-        /* Focus */
         .focus-card {
             background: #f3e5f5;
             border-radius: 15px;
@@ -161,8 +119,6 @@
         .focus-icon { font-size: 22px; margin-right: 10px; }
         .focus-title { font-weight: 600; color: #333; font-size: 13px; }
         .focus-desc { color: #666; font-size: 12px; }
-        
-        /* Actions */
         .actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -185,8 +141,6 @@
             background: #e0e0e0;
             color: #333;
         }
-        
-        /* Navigation */
         .nav-tabs {
             display: flex;
             gap: 8px;
@@ -208,12 +162,8 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        
-        /* Sections */
         .section { display: none; }
         .section.active { display: block; }
-        
-        /* Forms */
         .form-group { margin-bottom: 12px; }
         label {
             display: block;
@@ -240,8 +190,6 @@
             cursor: pointer;
             width: 100%;
         }
-        
-        /* Workouts */
         .workout-card {
             background: #f0f7ff;
             border-radius: 15px;
@@ -252,131 +200,93 @@
         .workout-card h4 { margin-bottom: 8px; color: #333; font-size: 15px; }
         .exercise-list { list-style: none; font-size: 13px; }
         .exercise-list li { padding: 5px 0; border-bottom: 1px solid #e0e0e0; }
-        
-        /* Chart */
         .chart-container { position: relative; height: 200px; margin: 15px 0; }
-        
-        /* Logout */
-        .logout-btn {
-            background: #f44336;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 13px;
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div class="container" id="loginScreen">
-        <div class="login-screen">
-            <h1>🌸 Jade's Transformation</h1>
-            <p>12-Week Female-Specific Body Recomposition</p>
-            <p style="font-size: 12px; color: #999; margin-top: 20px;">Sign in with Google to continue</p>
-            
-            <div id="g_id_onload"
-                 data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                 data-callback="handleCredentialResponse"
-                 data-auto_prompt="false">
-            </div>
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-size="large"
-                 data-theme="outline"
-                 data-text="sign_in_with"
-                 data-shape="rectangular"
-                 data-logo_alignment="left">
-            </div>
-            
-            <div class="access-denied" id="accessDenied">
-                <strong>Access Denied</strong><br>
-                Your email is not authorized. Please contact Cherry for access.
+    <div class="container">
+        <!-- Greeting -->
+        <div class="greeting">
+            <h1 id="greetingText">Hello, Jade! 👋</h1>
+            <p id="greetingSub">Set up your profile to get started</p>
+            <span class="cycle-badge" id="cycleBadge">Welcome!</span>
+        </div>
+        
+        <!-- Cycle Wheel -->
+        <div class="cycle-wheel">
+            <svg class="wheel-svg" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                <path d="M 50 5 A 45 45 0 0 1 72.5 12.5" fill="none" stroke="#e53935" stroke-width="8" stroke-linecap="round"/>
+                <path d="M 72.5 12.5 A 45 45 0 0 1 95 50" fill="none" stroke="#43a047" stroke-width="8" stroke-linecap="round"/>
+                <path d="M 95 50 A 45 45 0 0 1 87.5 72.5" fill="none" stroke="#fb8c00" stroke-width="8" stroke-linecap="round"/>
+                <path d="M 87.5 72.5 A 45 45 0 1 1 50 5" fill="none" stroke="#8e24aa" stroke-width="8" stroke-linecap="round"/>
+                <circle id="position-dot" cx="50" cy="50" r="5" fill="#667eea" stroke="white" stroke-width="2"/>
+            </svg>
+            <div class="wheel-center">
+                <div class="wheel-day" id="wheelDay">-</div>
+                <div class="wheel-label">Day</div>
             </div>
         </div>
-    </div>
-
-    <!-- Main App -->
-    <div class="container" id="mainApp">
-        <div id="dashboard" class="section active">
-            <!-- Greeting -->
-            <div class="greeting">
-                <h1 id="greetingText">Hello, Jade! 👋</h1>
-                <p id="greetingSub">Loading your cycle...</p>
-                <span class="cycle-badge" id="cycleBadge">Day -</span>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="streakNumber">0</div>
+                <div class="stat-label">Day Streak 🔥</div>
             </div>
-            
-            <!-- Cycle Wheel -->
-            <div class="cycle-wheel">
-                <svg class="wheel-svg" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#e0e0e0" stroke-width="8"/>
-                    <path d="M 50 5 A 45 45 0 0 1 72.5 12.5" fill="none" stroke="#e53935" stroke-width="8" stroke-linecap="round"/>
-                    <path d="M 72.5 12.5 A 45 45 0 0 1 95 50" fill="none" stroke="#43a047" stroke-width="8" stroke-linecap="round"/>
-                    <path d="M 95 50 A 45 45 0 0 1 87.5 72.5" fill="none" stroke="#fb8c00" stroke-width="8" stroke-linecap="round"/>
-                    <path d="M 87.5 72.5 A 45 45 0 1 1 50 5" fill="none" stroke="#8e24aa" stroke-width="8" stroke-linecap="round"/>
-                    <circle id="position-dot" cx="72.5" cy="12.5" r="5" fill="#667eea" stroke="white" stroke-width="2"/>
-                </svg>
-                <div class="wheel-center">
-                    <div class="wheel-day" id="wheelDay">-</div>
-                    <div class="wheel-label">Day</div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-number" id="progressPercent">0%</div>
+                <div class="stat-label">Complete</div>
             </div>
-            
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="streakNumber">0</div>
-                    <div class="stat-label">Day Streak 🔥</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="progressPercent">0%</div>
-                    <div class="stat-label">Complete</div>
-                </div>
+        </div>
+        
+        <!-- Progress -->
+        <div class="progress-card">
+            <div class="progress-header">
+                <span><strong>Week <span id="currentWeek">1</span></strong> of 12</span>
             </div>
-            
-            <!-- Progress -->
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span><strong>Week <span id="currentWeek">1</span></strong> of 12</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="actions">
+            <button class="action-btn btn-primary" onclick="showSection('tracker')">📝 Log Today</button>
+            <button class="action-btn btn-secondary" onclick="showSection('workouts')">💪 Workout</button>
+        </div>
+        
+        <!-- Today's Focus -->
+        <div class="focus-card">
+            <h3>🎯 Today's Focus</h3>
+            <div class="focus-item">
+                <span class="focus-icon">💪</span>
+                <div>
+                    <div class="focus-title">Training</div>
+                    <div class="focus-desc" id="descTraining">Set up your profile first</div>
                 </div>
             </div>
-            
-            <!-- Quick Actions -->
-            <div class="actions">
-                <button class="action-btn btn-primary" onclick="showSection('tracker')">📝 Log Today</button>
-                <button class="action-btn btn-secondary" onclick="showSection('workouts')">💪 Workout</button>
-            </div>
-            
-            <!-- Today's Focus -->
-            <div class="focus-card">
-                <h3>🎯 Today's Focus</h3>
-                <div class="focus-item">
-                    <span class="focus-icon">💪</span>
-                    <div>
-                        <div class="focus-title" id="focusTraining">Training</div>
-                        <div class="focus-desc" id="descTraining">Set up your profile first</div>
-                    </div>
-                </div>
-                <div class="focus-item">
-                    <span class="focus-icon">🥗</span>
-                    <div>
-                        <div class="focus-title" id="focusNutrition">Nutrition</div>
-                        <div class="focus-desc" id="descNutrition">Personalized plan coming soon</div>
-                    </div>
+            <div class="focus-item">
+                <span class="focus-icon">🥗</span>
+                <div>
+                    <div class="focus-title">Nutrition</div>
+                    <div class="focus-desc" id="descNutrition">Personalized plan coming soon</div>
                 </div>
             </div>
-            
-            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('dashboard')">🏠 Home</button>
+            <button class="nav-tab" onclick="showSection('profile')">👤 Profile</button>
+            <button class="nav-tab" onclick="showSection('tracker')">📊 Log</button>
+            <button class="nav-tab" onclick="showSection('workouts')">💪 Workouts</button>
+            <button class="nav-tab" onclick="showSection('progress')">📈 Stats</button>
         </div>
         
         <!-- Profile Section -->
         <div id="profile" class="section">
-            <h2>👤 Profile</h2>
+            <h2>👤 Profile Setup</h2>
             <form id="profileForm">
                 <div class="form-group"><label>Name</label><input type="text" id="name" value="Jade" readonly></div>
                 <div class="form-group"><label>Age</label><input type="number" id="age" placeholder="28" min="18" max="65"></div>
@@ -425,62 +335,17 @@
             <div class="chart-container"><canvas id="trendChart"></canvas></div>
             <div class="chart-container"><canvas id="weightChart"></canvas></div>
         </div>
-        
-        <!-- Navigation -->
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('dashboard')">🏠 Home</button>
-            <button class="nav-tab" onclick="showSection('profile')">👤 Profile</button>
-            <button class="nav-tab" onclick="showSection('tracker')">📊 Log</button>
-            <button class="nav-tab" onclick="showSection('workouts')">💪 Workouts</button>
-            <button class="nav-tab" onclick="showSection('progress')">📈 Stats</button>
-        </div>
     </div>
 
     <script>
-        // Approved emails
-        const APPROVED_EMAILS = ['jadexudigital@gmail.com'];
-        
-        // Check if already logged in
-        if (localStorage.getItem('jadeLoggedIn') === 'true') {
-            showMainApp();
-        }
-        
-        function handleCredentialResponse(response) {
-            const credential = JSON.parse(atob(response.credential.split('.')[1]));
-            const email = credential.email;
-            
-            if (APPROVED_EMAILS.includes(email)) {
-                localStorage.setItem('jadeLoggedIn', 'true');
-                localStorage.setItem('jadeEmail', email);
-                showMainApp();
-            } else {
-                document.getElementById('accessDenied').style.display = 'block';
-            }
-        }
-        
-        function showMainApp() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            initApp();
-        }
-        
-        function logout() {
-            localStorage.removeItem('jadeLoggedIn');
-            localStorage.removeItem('jadeEmail');
-            location.reload();
-        }
-        
-        // App initialization
         let profile = JSON.parse(localStorage.getItem('jadeProfile')) || {};
         let entries = JSON.parse(localStorage.getItem('jadeEntries')) || [];
-        let trendChart, weightChart;
         
-        function initApp() {
+        document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('checkinDate').valueAsDate = new Date();
             updateGreeting();
             loadProfile();
-            updateDashboard();
-        }
+        });
         
         function updateGreeting() {
             const hour = new Date().getHours();
@@ -503,48 +368,50 @@
                 document.getElementById('cycleBadge').textContent = `Day ${cycleDay} ${phase}`;
                 document.getElementById('wheelDay').textContent = cycleDay;
                 
-                // Update focus
+                // Update dot position
+                const angle = (cycleDay / cycleLength) * 360;
+                const rad = (angle - 90) * Math.PI / 180;
+                const x = 50 + 45 * Math.cos(rad);
+                const y = 50 + 45 * Math.sin(rad);
+                document.getElementById('position-dot').setAttribute('cx', x);
+                document.getElementById('position-dot').setAttribute('cy', y);
+                
                 let training, nutrition;
                 if (cycleDay <= 5) {
                     training = 'Rest & Recovery • Light yoga or walking';
-                    nutrition = 'Iron-rich foods • Stay hydrated • Comfort foods OK';
+                    nutrition = 'Iron-rich foods • Stay hydrated';
                 } else if (cycleDay <= 14) {
-                    training = 'Lift HEAVY • Progressive overload • Try new challenges';
+                    training = 'Lift HEAVY • Progressive overload';
                     nutrition = 'Higher carbs OK • 25-30g protein per meal';
                 } else if (cycleDay <= 17) {
-                    training = 'Peak Performance • Go for PRs • Maximum intensity';
-                    nutrition = 'Maximum energy • Eat to fuel • Extra carbs';
+                    training = 'Peak Performance • Go for PRs!';
+                    nutrition = 'Maximum energy • Eat to fuel';
                 } else {
-                    training = 'Moderate intensity • Focus on form • Reduce HIIT';
-                    nutrition = 'Increase carbs + magnesium • Manage cravings';
+                    training = 'Moderate intensity • Focus on form';
+                    nutrition = 'Increase carbs + magnesium';
                 }
                 
                 document.getElementById('descTraining').textContent = training;
                 document.getElementById('descNutrition').textContent = nutrition;
-            } else {
-                document.getElementById('greetingSub').textContent = 'Set up your profile to track your cycle';
-                document.getElementById('cycleBadge').textContent = 'Set up profile';
             }
             
             // Calculate streak
             let streak = 0;
-            const sortedEntries = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
-            for (let entry of sortedEntries) {
-                if (entry.workoutDone === 'yes' || entry.workoutDone === 'rest') streak++;
+            const sorted = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+            for (let e of sorted) {
+                if (e.workoutDone === 'yes' || e.workoutDone === 'rest') streak++;
                 else break;
             }
             document.getElementById('streakNumber').textContent = streak;
             
             // Calculate progress
-            const startDate = entries.length > 0 ? new Date(entries[0].date) : new Date();
-            const today = new Date();
-            const weeksPassed = Math.floor((today - startDate) / (7 * 24 * 60 * 60 * 1000)) + 1;
-            const currentWeek = Math.min(weeksPassed, 12);
-            const progressPercent = Math.round((currentWeek / 12) * 100);
-            
-            document.getElementById('currentWeek').textContent = currentWeek;
-            document.getElementById('progressPercent').textContent = progressPercent + '%';
-            document.getElementById('progressFill').style.width = progressPercent + '%';
+            const start = entries.length > 0 ? new Date(entries[0].date) : new Date();
+            const weeks = Math.floor((new Date() - start) / (7 * 24 * 60 * 60 * 1000)) + 1;
+            const week = Math.min(weeks, 12);
+            const pct = Math.round((week / 12) * 100);
+            document.getElementById('currentWeek').textContent = week;
+            document.getElementById('progressPercent').textContent = pct + '%';
+            document.getElementById('progressFill').style.width = pct + '%';
         }
         
         function showSection(id) {
@@ -554,7 +421,6 @@
             event.target.classList.add('active');
         }
         
-        // Profile form
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();
             profile = {
@@ -583,7 +449,6 @@
             if (profile.lastPeriodDate) document.getElementById('lastPeriodDate').value = profile.lastPeriodDate;
         }
         
-        // Daily form
         document.getElementById('dailyForm').addEventListener('submit', function(e) {
             e.preventDefault();
             entries.push({
@@ -599,15 +464,11 @@
                 notes: document.getElementById('notes').value
             });
             localStorage.setItem('jadeEntries', JSON.stringify(entries));
-            updateDashboard();
+            updateGreeting();
             alert('Entry saved! 🎉');
             this.reset();
             document.getElementById('checkinDate').valueAsDate = new Date();
         });
-        
-        function updateDashboard() {
-            // Update stats
-        }
     </script>
 </body>
 </html>
